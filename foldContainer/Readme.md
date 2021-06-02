@@ -6,7 +6,7 @@
  * @Last Modified time: 2021-06-02 14:46:43
 */
 
-在需要折叠的antd表格上加一层这个组件，就可以实现多余的点击展开
+在需要折叠的组件上加一层这个组件，就可以实现多余的点击展开
 ```
 <FoldContainer>
     <Your Component />
