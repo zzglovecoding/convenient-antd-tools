@@ -9,6 +9,7 @@
 import { Icon, Input, Button, message } from 'antd';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import cls from 'classnames';
 
 export default function pickoutSettings(props) {
     let {
@@ -16,7 +17,8 @@ export default function pickoutSettings(props) {
         handleSearchFunc,
         handleResetFunc,
         onFilterFunc,
-        className
+        className,
+        filterIcon
     } = props;
 
     // 数字的大小状态定义
@@ -56,16 +58,16 @@ export default function pickoutSettings(props) {
     };
 
     return {
-        filterIcon: () => {return <Icon type="caret-down" />;},
+        filterIcon: filterIcon,
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{padding:'8px'}}>
+            <div className={cls('zzg-common-filterContainer',className)}>
                 <div>
                     <span>最小金额</span>
                     <Input
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value, selectedKeys[1]] : [undefined, selectedKeys[1]])}
                         onPressEnter={() => handleSearchFunc(selectedKeys, confirm)}
-                        style={{ width: 160, marginBottom: 8, display: 'inline-block', marginLeft: 10 }}
+                        className="zzg-common-firstInput"
                         placeholder="请输入最小金额"
                     />
                 </div>
@@ -75,7 +77,7 @@ export default function pickoutSettings(props) {
                         value={selectedKeys[1]}
                         onChange={e => setSelectedKeys(e.target.value ? [selectedKeys[0], e.target.value] : [selectedKeys[0], undefined])}
                         onPressEnter={() => handleSearchFunc(selectedKeys, confirm)}
-                        style={{ width: 160, marginBottom: 8, display: 'inline-block', marginLeft: 10 }}
+                        className="zzg-common-secondInput"
                         placeholder="请输入最大金额"
                     />
                 </div>
@@ -84,11 +86,16 @@ export default function pickoutSettings(props) {
                     onClick={() => handleSearchFunc(selectedKeys, confirm, clearFilters)}
                     icon="search"
                     size="small"
+                    className="zzg-common-firstButton"
                     style={{ width: 90, marginRight: 8, marginLeft: 20 }}
                 >
                         搜索
                 </Button>
-                <Button onClick={() => handleResetFunc(clearFilters)} size="small" style={{ width: 90 }}>
+                <Button 
+                    onClick={() => handleResetFunc(clearFilters)} 
+                    size="small" 
+                    className="zzg-common-secondButton"
+                    >
                         清除
                 </Button>
             </div>
@@ -103,5 +110,10 @@ pickoutSettings.propTypes = {
     columnName: PropTypes.string.isRequired,
     handleSearchFunc: PropTypes.func,
     handleResetFunc: PropTypes.func,
-    onFilterFunc: PropTypes.func
+    onFilterFunc: PropTypes.func,
+    filterIcon:PropTypes.func
 };
+
+pickoutSettings.defaultProps = {
+    filterIcon:() => <Icon type="caret-down" />
+}

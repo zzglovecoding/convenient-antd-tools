@@ -11,7 +11,8 @@ export default function FoldContainer(props) {
         tipWordsOnClose,
         tipStyles,
         openImg,
-        closeImg
+        closeImg,
+        className
     } = props;
 
     const [isShowAll, setIsShowAll] = useState(false);
@@ -23,13 +24,13 @@ export default function FoldContainer(props) {
     }, []);
 
     return (
-        <div className={styles.foldContainer}>
+        <div className={cls("zzg-common-foldContainer",className)}>
             <div style={{ position: 'relative', height: initialHeight <= maxHeight ? 'auto' : !isShowAll ? maxHeight + 'px' : 'auto', overflow: 'hidden', marginBottom: bottomSpace + 'px' }}>
                 {
                     props.children
                 }
             </div>
-            <div style={{ display: initialHeight <= maxHeight ? 'none' : 'block', ...tipStyles }} className={styles.seeMore} onClick={() => setIsShowAll(!isShowAll)} >{
+            <div style={{ display: initialHeight <= maxHeight ? 'none' : 'block', ...tipStyles }} className="zzg-common-seeMore" onClick={() => setIsShowAll(!isShowAll)} >{
                 !isShowAll ? (<div>{tipWordsOnOpen}{openImg}</div>) : (<div>{tipWordsOnClose}{closeImg}</div>)
             }</div>
         </div>
