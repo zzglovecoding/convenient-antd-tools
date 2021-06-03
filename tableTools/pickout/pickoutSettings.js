@@ -87,7 +87,6 @@ export default function pickoutSettings(props) {
                     icon="search"
                     size="small"
                     className="zzg-common-firstButton"
-                    style={{ width: 90, marginRight: 8, marginLeft: 20 }}
                 >
                         搜索
                 </Button>
