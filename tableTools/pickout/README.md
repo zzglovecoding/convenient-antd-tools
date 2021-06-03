@@ -1,4 +1,3 @@
 筛选弹框的逻辑
 
-pickoutHooks.js是需要使用到的状态
-pickoutSettings.js是配置
+columnName是必须传的参数，这是该筛选行的dataIndex
