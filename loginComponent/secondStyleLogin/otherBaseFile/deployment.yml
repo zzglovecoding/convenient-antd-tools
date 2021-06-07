@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # (需要修改)
+  name: basic-data-service-pc-homepage
+spec:
+  ports:
+    - port: 80
+  selector:
+    # (需要修改)
+    app: basic-data-service-pc-homepage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # (需要修改)
+  name: basic-data-service-pc-homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # (需要修改)
+      app: basic-data-service-pc-homepage
+  template:
+    metadata:
+      labels:
+        # (需要修改)
+        app: basic-data-service-pc-homepage
+    spec:
+      imagePullSecrets:
+        - name: bbd-docker-registry
+      containers:
+        # (需要修改)
+        - image: registry.prod.bbdops.com/front/y900/basic-data-service-pc-homepage:$CI_COMMIT_SHORT_SHA
+          # (需要修改)
+          name: basic-data-service-pc-homepage
+          env:
+            - name: TIME_ZONE
+              value: Asia/Shanghai
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 0.1
+            limits:
+              memory: 1Gi
+              cpu: 1
+          ports:
+            - containerPort: 80
+              # (需要修改,长度不能大于15个字符)
+              name: homepage

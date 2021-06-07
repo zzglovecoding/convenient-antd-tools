@@ -1,0 +1,131 @@
+# 配置包含3个阶段build, package, deploy
+stages:
+  - build
+  - build-dev
+  - package
+  - deploy
+
+# build阶段前端项目构建任务
+node-build:
+   # 在build阶段执行    
+  stage: build
+  # 根据 tag 匹配对应的 Group Runner
+  tags:
+    - nodejs
+  
+  # 只在指定的分支执行该job
+  only:
+    refs:
+      - tags
+      - dev
+      - test
+      - master
+  
+  # 执行脚本  
+  script:
+    # 安装依赖
+    - npm install --registry http://verdaccio.bbdops.com/
+    # 执行构建程序
+    - npm run build:prod
+
+  # 将路径下的文件传递给下一个job  
+  artifacts:
+    paths:
+      - build
+
+node-build-dev:
+  stage: build-dev
+  # 根据 tag 匹配对应的 Group Runner
+  tags:
+    - nodejs
+  # 只在指定的分支执行该job
+  only:
+    refs:
+      - dev
+  # 执行脚本  
+  script:
+    # 替换配置文件路劲
+    - ls
+    - pwd
+    - sed -i "s@.testing.@.dev.@g" build/config.js
+    # 将路径下的文件传递给下一个job  
+  artifacts:
+    paths:
+      - build
+
+# package阶段构建 docker 镜像任务
+docker-build:
+  # 在package阶段执行  
+  stage: package
+  tags:
+    - nodejs
+  # 只在指定的分支执行该job
+  only:
+    refs:
+      - tags
+      - dev
+      - test
+      - master
+  # 变量声明
+  variables:
+    # 当前项目生成的镜像名称, 前端提交的镜像使用 front 前缀
+    DOCKER_IMAGE_NAME: registry.prod.bbdops.com/front/y900/basic-data-service-pc-homepage
+  # 执行脚本  
+  script:
+    # 使用当前路径 Dockerfile 创建3个镜像
+    - docker build -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA -t $DOCKER_IMAGE_NAME:$CI_COMMIT_REF_NAME -t $DOCKER_IMAGE_NAME:latest .
+    # 发布 $CI_COMMIT_SHORT_SHA 镜像到仓库
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    # 发布 $CI_COMMIT_BRANCH 镜像到仓库
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_REF_NAME
+    # 发布 latest 镜像到仓库
+    - docker push $DOCKER_IMAGE_NAME:latest
+
+# 以"."开头的为 hidden job, 不会被GitLab CI/CD 执行, 但可以被继承.
+.kubernetes-deploy:
+  # 在deploy阶段执行    
+  stage: deploy
+  tags:
+    - nodejs
+  # 执行脚本
+  before_script:
+    # 用变量值替换文件中的占位符 $CI_COMMIT_SHORT_SHA
+    - sed -i 's/$CI_COMMIT_SHORT_SHA/'"$CI_COMMIT_SHORT_SHA"'/' deployment.yml
+
+# deploy阶段开发环境任务
+kubernetes-deploy-development:
+  # 继承自 .kubernetes-deploy 任务配置
+  extends: .kubernetes-deploy
+  # 只在dev分支执行
+  only:
+    refs:
+      - tags
+      - dev
+  #when: manual
+  # 在script脚本之前执行
+  script:
+    # 为集群下对应命名空间的项目镜像进行容器启动的资源分配(需要修改 red-alert 为对应项目的命名空间)
+    - kubectl apply -f deployment.yml -n y900 --kubeconfig=$HOME/.kube/development-config.yml
+
+# deploy阶段测试环境任务
+kubernetes-deploy-testing:
+  extends: .kubernetes-deploy
+  only:
+    refs:
+      - tags
+      - test
+  script:
+    # 为集群下对应命名空间的项目镜像进行容器启动的资源分配(需要修改 red-alert 为对应项目的命名空间)
+    - kubectl apply -f deployment.yml -n y900 --kubeconfig=$HOME/.kube/testing-config.yml
+
+# deploy阶段生产环境任务
+kubernetes-deploy-production:
+  extends: .kubernetes-deploy
+  only:
+    refs:
+      - tags
+      - master
+  when: manual
+  script:
+    # 为集群下对应命名空间的项目镜像进行容器启动的资源分配(需要修改 red-alert 为对应项目的命名空间)
+    - kubectl apply -f deployment.yml -n y900 --kubeconfig=$HOME/.kube/production-config.yml

@@ -1,0 +1,3 @@
+# 说明
+
+这个登录页面的逻辑就是，只要没有userInfo就跳转到登录页面，配置是写在httpSettings里头的，所有的登录状态判断，都在afterRepsonse当中

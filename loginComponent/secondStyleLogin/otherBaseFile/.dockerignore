@@ -1,0 +1,8 @@
+.git
+.idea
+bin
+certificate
+mock
+src
+test
+node_modules

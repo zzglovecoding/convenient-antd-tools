@@ -1,0 +1,158 @@
+{
+  "name": "basic-data-service-pc-homepage",
+  "version": "0.1.0",
+  "description": "基础数据业务信息系统门户首页（云盾系统门户首页）",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "homepage": "",
+  "bugs": {
+    "url": ""
+  },
+  "scripts": {
+    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.dev.babel.js --colors --display-error-details",
+    "build:prod": "gulp clean-build && cross-env NODE_ENV=production webpack --config webpack.config.prod.babel.js --colors --display-error-details",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.babel.js --colors",
+    "mock": "mock-server ./mock/data --static ./mock/static --config ./mock/mock.config.js --watch",
+    "start:mock": "concurrently \"cross-env npm start\" \"npm run mock\"",
+    "lint:js": "eslint -c .eslintrc.prod.json src/ --ext .js,.jsx --fix",
+    "lint:css": "stylelint \"src/**/*.{css,less,scss}\" --cache --fix",
+    "test": "jest",
+    "package": "npm run build:prod && gulp package",
+    "deploy": "npm run package && gulp deploy",
+    "git:push": "gulp git-push",
+    "refresh": "npm install y900-components@latest --save",
+    "start:test": "cross-env proxy_mode=test npm run start"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "eslint -c .eslintrc.prod.json --fix",
+      "git add"
+    ],
+    "src/**/*.{css,less,scss}": [
+      "stylelint --cache --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "@easytool/http": "^0.1.4",
+    "@easytool/react-permission": "^0.1.7",
+    "antd": "^3.26.18",
+    "classnames": "^2.2.6",
+    "js-cookie": "^2.2.1",
+    "md5": "^2.3.0",
+    "moment": "^2.29.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "y900-components": "0.0.104"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@easytool/define-config": "^0.1.0",
+    "@easytool/mock-server": "^0.1.0",
+    "@easytool/proxy-config": "^0.1.0",
+    "autoprefixer": "^9.1.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.2",
+    "case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^4.0.1",
+    "copy-webpack-plugin": "^6.1.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "del": "^4.1.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
+    "eslint": "^5.6.0",
+    "eslint-loader": "^2.1.0",
+    "eslint-plugin-react": "^7.12.3",
+    "express": "^4.17.1",
+    "file-loader": "^2.0.0",
+    "gulp": "^4.0.0",
+    "gulp-sftp-up4": "^0.1.8",
+    "gulp-zip": "^4.2.0",
+    "html-webpack-plugin": "^4.3.0",
+    "husky": "^1.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.1.0",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.1",
+    "lint-staged": "^9.3.0",
+    "merge-stream": "^2.0.0",
+    "mini-css-extract-plugin": "^0.4.2",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.1.0",
+    "postcss-simple-vars": "^5.0.2",
+    "style-loader": "^0.23.0",
+    "stylelint": "^10.1.0",
+    "stylelint-webpack-plugin": "^0.10.5",
+    "terser-webpack-plugin": "^2.3.6",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.19.0",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8",
+    "webpack-merge": "^4.1.4"
+  },
+  "devEnvironments": {
+    "server": {
+      "local": 9003,
+      "mock": 3000
+    },
+    "proxy": {
+      "(/proxy)": "http://10.28.200.165:9991"
+    },
+    "proxyTest": {
+      "(/proxy)": "http://yundun.homepage.testing.bbdops.com"
+    },
+    "globals": {
+      "__DEV__": true,
+      "__HOMEPAGE_HOST__": "//localhost:9003",
+      "__COLLECT_SERVICE_HOST__": "//localhost:9004",
+      "__SUPPORT_SERVICE_HOST__": "//localhost:9002",
+      "__DATA_MANAGEMENT_HOST__": "//localhost:9001",
+      "__INTELLIGENT_HOST__": "//localhost:9005",
+      "__KNOWLEDGE_BASE_HOST__": "//61.155.5.130:29333",
+      "__PLAN_EXEC_SUPER_HOST__": "//cloud.cbsd-pro.com:8003"
+    }
+  },
+  "parcel": {
+    "name": "basic-data-service-pc-homepage",
+    "publicPath": "/",
+    "zip": true
+  },
+  "deployments": [
+    {
+      "host": "",
+      "port": 22,
+      "user": "",
+      "pass": "",
+      "timeout": 60000,
+      "remotePath": "/usr/local/static",
+      "enabled": true
+    }
+  ]
+}
