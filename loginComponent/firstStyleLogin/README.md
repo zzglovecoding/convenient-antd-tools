@@ -1,0 +1,7 @@
+# 说明
+
+这个文件没有包括html文件，是因为html文件是webpack打包过去的文件，使用的是htmlWebpackPlugin这个插件，这个插件的功能，除了把html文件打包过去，还会自动引入entry那里打包出去的所有文件，还会引入css文件
+
+先到MainLayout，然后到默认的路由下的组件，这里是默认到home/search，但是没有token会跳转到login的界面，所以这里是在login的位置实现了登录
+
+再结合全局请求的配置，就可以实现这个登录接口了，但是这样有一个问题，那就是根据本地的localStorage去判断是否登录，实际上是不太对的，应该把登录跳转的逻辑全部放在http的配置，也就是afterResponse当中去才比较合适

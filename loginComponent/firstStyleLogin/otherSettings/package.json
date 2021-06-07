@@ -1,0 +1,124 @@
+{
+  "name": "app-name",
+  "description": "项目名称",
+  "version": "1.0.0",
+  "parcel": {
+    "publicPath": "/",
+    "format": "zip"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=development webpack --config webpack.config.dev.babel.js --colors --display-error-details",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.babel.js --colors",
+    "mock": "mock-server ./mock/data --static ./mock/static --config ./mock/mock.config.js --watch",
+    "start:mock": "concurrently \"cross-env npm start\" \"npm run mock\"",
+    "lint-js": "eslint -c .eslintrc.prod.js src/ --ext .js,.jsx --fix",
+    "lint-css": "stylelint \"src/**/*.{css,less,scss}\" --cache --fix",
+    "test": "jest",
+    "environment": "cross-env node environment.js",
+    "package": "cross-env NODE_ENV=production webpack --config webpack.config.prod.babel.js --colors --display-error-details"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "eslint -c .eslintrc.prod.js --fix"
+    ],
+    "src/**/*.{css,less,scss}": [
+      "stylelint --cache --fix"
+    ]
+  },
+  "dependencies": {
+    "@babel/polyfill": "7.12.1",
+    "@babel/runtime": "7.12.5",
+    "@easytool/http": "1.0.1",
+    "antd": "3.26.20",
+    "classnames": "2.2.6",
+    "echarts": "4.9.0",
+    "echarts-for-react": "^2.0.16",
+    "extend": "^3.0.2",
+    "moment": "2.29.1",
+    "net": "^1.0.2",
+    "path-to-regexp": "1.7.0",
+    "prop-types": "15.7.2",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "react-router-dom": "5.2.0",
+    "sockjs-client": "^1.5.1",
+    "stompjs": "^2.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@easytool/define-config": "^0.1.0",
+    "@easytool/mock-server": "^0.2.2",
+    "@easytool/proxy-config": "^0.1.0",
+    "@easytool/react-permission": "^0.1.9",
+    "autoprefixer": "^9.1.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "10.0.1",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-import-less": "^0.1.6",
+    "case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^4.0.1",
+    "copy-webpack-plugin": "^6.1.1",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
+    "eslint": "^5.6.0",
+    "eslint-loader": "^2.1.0",
+    "eslint-plugin-react": "^7.12.3",
+    "file-loader": "^2.0.0",
+    "filemanager-webpack-plugin": "^2.0.5",
+    "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.3.8",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.1.0",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.1",
+    "lint-staged": "^10.5.4",
+    "mini-css-extract-plugin": "^0.4.2",
+    "minimist": "^1.2.5",
+    "moment-locales-webpack-plugin": "^1.2.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.1.0",
+    "postcss-simple-vars": "^5.0.2",
+    "style-loader": "^0.23.0",
+    "stylelint": "^13.11.0",
+    "stylelint-webpack-plugin": "^2.1.1",
+    "terser-webpack-plugin": "^2.3.6",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.19.0",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8",
+    "webpack-merge": "^4.1.4"
+  },
+  "devEnvironments": {
+    "servers": {
+      "local": 8080,
+      "mock": 3000
+    },
+    "proxies": {
+      "/api": "http://das.finance.bbdops.com"
+    },
+    "globals": {
+      "__DEV__": true
+    }
+  }
+}
