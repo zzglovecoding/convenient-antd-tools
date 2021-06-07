@@ -1,0 +1,59 @@
+.containers{
+    background-color: #265c72;
+    width: 150px;
+    .searchArea{
+        height: 30px;
+        :global{
+            .ant-input{
+                height: 30px;
+                background-color: #0D92A7;
+                border: none;
+                padding-right: 45px;
+                padding-left: 25px;
+                color:'#fff';
+            }
+        }
+    }
+    .treeContainer{
+        height: 145px;
+        overflow: scroll;
+        margin-top: 13px;
+        padding-left: 15px;
+        :global{
+            .ant-checkbox-group-item{
+                display: inline-block;
+                margin: 0 10px 10px 10px;
+                color: #fff;
+            }
+        }
+        .dropDown {
+            :global {
+                .ant-select-tree li .ant-select-tree-node-content-wrapper {
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .buttonArea{
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: flex;
+        #myButton1{
+            background: url('./images/cancelButtonBg.png') no-repeat center center;
+            background-size: 60px 20px;
+            color: #fff;
+            border: 0px;
+            margin-top: 4px;
+            flex:1;
+        }
+        #myButton2{
+            background: url('./images/okButtonBg.png') no-repeat center center;
+            background-size: 60px 20px;
+            color:#fff;
+            border: 0px;
+            margin-top: 4px;
+            flex:1;
+        }
+    }
+    
+}
