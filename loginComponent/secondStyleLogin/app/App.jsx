@@ -19,9 +19,9 @@ export default function App() {
     } = frame;
     let routes = routers;
 
+    // 这里对传下去的routers对象进行了控制，根据userInfo里面的permissionList进行了控制，不能看的，就过滤掉
     if (userInfo) {
         routes = getUpdatedMenus(userInfo.menuList, getAccessMenus(routers, userInfo.permissionList));
-        
     }
 
     return (
